@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIS Admin Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>SIS Admin System</h2>
+        <ul>
+            <li><a href="#" id="tab-curriculum" class="active">Curriculum Management</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        
+        <div id="view-curriculum" class="module-view">
+            <h3>Create New Curriculum</h3>
+            <form id="curriculumForm">
+                <label for="currName">Curriculum Name:</label><br>
+                <input type="text" id="currName" name="currName" required placeholder="e.g. BS IT"><br><br>
+
+                <label for="schoolYear">School Year:</label><br>
+                <input type="text" id="schoolYear" name="schoolYear" required placeholder="e.g. 2024-2025"><br><br>
+
+                <label for="description">Description:</label><br>
+                <textarea id="description" name="description" rows="3" required></textarea><br><br>
+
+                <button type="submit">Save Curriculum</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
