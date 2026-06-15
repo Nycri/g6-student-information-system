@@ -12,7 +12,11 @@
     <div class="sidebar">
         <h2>SIS Admin System</h2>
         <ul>
-            <li><a href="#" id="tab-curriculum" class="active">Curriculum Management</a></li>
+            <li><a href="#" id="tab-curriculum" class="active nav-link">Curriculum Management</a></li>
+            <li><a href="#" id="tab-students" class="nav-link">Student Management</a></li>
+            <li><a href="#" id="tab-faculty" class="nav-link">Faculty Management</a></li>
+            <li><a href="#" id="tab-subjects" class="nav-link">Subject Management</a></li>
+            <li><a href="#" id="tab-sections" class="nav-link">Section Management</a></li>
         </ul>
     </div>
 
@@ -20,7 +24,7 @@
         
         <div id="view-curriculum" class="module-view">
             <h3>Create New Curriculum</h3>
-            <form id="curriculumForm">
+            <form id="curriculumForm" class="form-card">
                 <label for="currName">Curriculum Name:</label><br>
                 <input type="text" id="currName" name="currName" required placeholder="e.g. BS IT"><br><br>
 
@@ -32,6 +36,101 @@
 
                 <button type="submit">Save Curriculum</button>
             </form>
+        </div>
+
+        <div id="view-students" class="module-view" style="display: none;">
+            <h3>Register New Student</h3>
+            <form id="studentForm" class="form-card">
+                <input type="text" id="stuFirstName" placeholder="First Name" required>
+                <input type="text" id="stuLastName" placeholder="Last Name" required>
+                <input type="email" id="stuEmail" placeholder="Email Address" required>
+                <input type="text" id="stuCourse" placeholder="Course (e.g., BSCS)" required>
+                <button type="submit">Enroll Student</button>
+            </form>
+
+            <br>
+
+            <h3>Enrolled Students Directory</h3>
+            <table class="data-table" width="100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Course</th>
+                        <th>System Username</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTableBody">
+                    </tbody>
+            </table>
+        </div>
+
+        <div id="view-faculty" class="module-view" style="display: none;">
+            <h3>Register New Faculty Member</h3>
+            <form id="facultyForm" class="form-card">
+                <input type="text" id="facFirstName" placeholder="First Name" required>
+                <input type="text" id="facLastName" placeholder="Last Name" required>
+                <input type="email" id="facEmail" placeholder="Email Address" required>
+                <input type="text" id="facDepartment" placeholder="Department" required>
+                <input type="text" id="facSubjects" placeholder="Preferred Subjects (Comma separated)" required>
+                <button type="submit">Add Faculty</button>
+            </form>
+
+            <br>
+
+            <h3>Faculty Directory</h3>
+            <table class="data-table" width="100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Subjects</th>
+                        <th>System Username</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="facultyTableBody">
+                    </tbody>
+            </table>
+        </div>
+        <div id="view-subjects" class="module-view" style="display: none;">
+            <h3>Create New Subject</h3>
+            <form id="subjectForm" class="form-card">
+                <input type="text" id="subCode" placeholder="Subject Code (e.g., IT101)" required>
+                <input type="text" id="subDesc" placeholder="Description (e.g., Programming 1)" required>
+                <input type="number" id="subUnits" placeholder="Units (e.g., 3)" required>
+                <input type="text" id="subCourse" placeholder="Assigned Course (e.g., BSIT)" required>
+                <button type="submit">Add Subject</button>
+            </form>
+            <br>
+            <h3>Subject Master List</h3>
+            <table class="data-table" width="100%">
+                <thead>
+                    <tr><th>ID</th><th>Code</th><th>Description</th><th>Units</th><th>Course</th><th>Action</th></tr>
+                </thead>
+                <tbody id="subjectTableBody"></tbody>
+            </table>
+        </div>
+
+        <div id="view-sections" class="module-view" style="display: none;">
+            <h3>Create New Section Block</h3>
+            <form id="sectionForm" class="form-card">
+                <input type="text" id="secName" placeholder="Section Name (e.g., BSIT-1A)" required>
+                <input type="text" id="secCourse" placeholder="Degree Program (e.g., BSIT)" required>
+                <input type="number" id="secYear" placeholder="Year Level (e.g., 1)" required>
+                <input type="number" id="secCapacity" placeholder="Max Capacity (e.g., 40)" required>
+                <button type="submit">Create Section</button>
+            </form>
+            <br>
+            <h3>Active Sections</h3>
+            <table class="data-table" width="100%">
+                <thead>
+                    <tr><th>ID</th><th>Section</th><th>Course</th><th>Year Level</th><th>Capacity</th><th>Action</th></tr>
+                </thead>
+                <tbody id="sectionTableBody"></tbody>
+            </table>
         </div>
     </div>
 
