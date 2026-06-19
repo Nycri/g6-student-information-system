@@ -15,13 +15,14 @@ public class Subject {
     private Long id;
     private String subjectCode; 
     private String description; 
-    private int units;         
+    private Integer units;         
+
     private String courseAssigned; 
 
     public Subject() {
     }
 
-    public Subject(String subjectCode, String description, int units, String courseAssigned) {
+    public Subject(String subjectCode, String description, Integer units, String courseAssigned) {
         this.subjectCode = subjectCode;
         this.description = description;
         this.units = units;
@@ -49,11 +50,11 @@ public class Subject {
       this.description = description;
     }
 
-    public int getUnits() {
+    public Integer getUnits() {
       return units;
     }
 
-    public void setUnits(int units) {
+    public void setUnits(Integer units) {
       this.units = units;
     }
 

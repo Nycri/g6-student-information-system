@@ -10,13 +10,16 @@
 <body>
 
     <div class="sidebar">
-        <h2>SIS Admin System</h2>
+        <img src="LINAWSIS.png" alt="Linaw University Logo" class="logo">
+        <h2>Linaw University of Laguna</h2> 
+        <h4>SIS Admin System</h4>
         <ul>
             <li><a href="#" id="tab-curriculum" class="active nav-link">Curriculum Management</a></li>
             <li><a href="#" id="tab-students" class="nav-link">Student Management</a></li>
             <li><a href="#" id="tab-faculty" class="nav-link">Faculty Management</a></li>
             <li><a href="#" id="tab-subjects" class="nav-link">Subject Management</a></li>
             <li><a href="#" id="tab-sections" class="nav-link">Section Management</a></li>
+            <li><a href="#" id="tab-schedules" class="nav-link">Schedule Management</a></li> </ul>
         </ul>
     </div>
 
@@ -130,6 +133,51 @@
                     <tr><th>ID</th><th>Section</th><th>Course</th><th>Year Level</th><th>Capacity</th><th>Action</th></tr>
                 </thead>
                 <tbody id="sectionTableBody"></tbody>
+            </table>
+        </div>
+        <div id="view-schedules" class="module-view" style="display: none;">
+            <h3>Assign Class Schedule</h3>
+            <form id="scheduleForm" class="form-card">
+                
+                <select id="schedFacultyId" required>
+                    <option value="" disabled selected>Select Faculty</option>
+                </select>
+                
+                <select id="schedSubjectId" required>
+                    <option value="" disabled selected>Select Subject</option>
+                </select>
+                
+                <select id="schedSectionId" required>
+                    <option value="" disabled selected>Select Section</option>
+                </select>
+
+                <input type="text" id="schedRoom" placeholder="Room (e.g., Room 101)" required>
+                
+                <select id="schedDay" required>
+                    <option value="" disabled selected>Select Day of the Week</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                </select>
+
+                <label style="font-size: 12px; color: #555; font-weight: bold;">Start Time:</label>
+                <input type="time" id="schedStartTime" required>
+                
+                <label style="font-size: 12px; color: #555; font-weight: bold;">End Time:</label>
+                <input type="time" id="schedEndTime" required>
+
+                <button type="submit">Save Schedule</button>
+            </form>
+            <br>
+            <h3>Master Schedule List</h3>
+            <table class="data-table" width="100%">
+                <thead>
+                    <tr><th>#</th><th>Faculty</th><th>Subject</th><th>Section</th><th>Room</th><th>Day</th><th>Time</th><th>Action</th></tr>
+                </thead>
+                <tbody id="scheduleTableBody"></tbody>
             </table>
         </div>
     </div>

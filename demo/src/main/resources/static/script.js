@@ -25,6 +25,15 @@ $(document).ready(function() {
             $("#view-sections").fadeIn();
             loadSections(); 
         }
+         else if (targetId === "tab-sections") {
+            $("#view-sections").fadeIn();
+            loadSections(); 
+        }
+        else if (targetId === "tab-schedules") {
+            $("#view-schedules").fadeIn();
+            loadSchedules(); 
+            populateScheduleDropdowns(); // <--- ADD THIS LINE!
+        }
     });
 
     //Curriculum form submission 
@@ -274,3 +283,121 @@ $(document).ready(function() {
             $.ajax({ url: "http://localhost:8080/api/section/delete/" + id, type: "DELETE", success: function() { loadSections(); } });
         }
     };
+    // ==========================================
+    // SPRINT 3: SCHEDULE MANAGEMENT LOGIC
+    // ==========================================
+
+    function loadSchedules() {
+        $.ajax({
+            url: "http://localhost:8080/api/schedules/all",
+            type: "GET",
+            success: function(schedules) {
+                let rows = "";
+                for(let i = 0; i < schedules.length; i++) {
+                    let s = schedules[i];
+                    let displayNumber = i + 1; 
+
+                    // Extract actual human-readable Names!
+                    let facName = s.faculty ? `${s.faculty.firstName} ${s.faculty.lastName}` : 'N/A';
+                    let subName = s.subject ? s.subject.subjectCode : 'N/A';
+                    let secName = s.section ? s.section.sectionName : 'N/A';
+
+                    rows += `<tr>
+                        <td>${displayNumber}</td>
+                        <td><b>${facName}</b></td>
+                        <td>${subName}</td>
+                        <td>${secName}</td>
+                        <td>${s.room}</td>
+                        <td>${s.dayOfWeek}</td>
+                        <td>${s.startTime} - ${s.endTime}</td>
+                        <td><button class="delete-btn" onclick="deleteSchedule(${s.id})">Delete</button></td>
+                    </tr>`;
+                }
+                $("#scheduleTableBody").html(rows);
+            }
+        });
+    }
+
+    $("#scheduleForm").submit(function(event) {
+        event.preventDefault();
+        
+        // We package the data exactly how we did in Postman!
+        let scheduleData = {
+            faculty: { id: $("#schedFacultyId").val() },
+            subject: { id: $("#schedSubjectId").val() },
+            section: { id: $("#schedSectionId").val() },
+            room: $("#schedRoom").val(),
+            dayOfWeek: $("#schedDay").val(),
+            startTime: $("#schedStartTime").val(),
+            endTime: $("#schedEndTime").val()
+        };
+
+        $.ajax({
+            url: "http://localhost:8080/api/schedules/add",
+            type: "POST", 
+            contentType: "application/json", 
+            data: JSON.stringify(scheduleData),
+            success: function() {
+                alert("Schedule Block Created Successfully!");
+                $("#scheduleForm")[0].reset();
+                loadSchedules();
+            },
+            error: function(xhr) {
+                // THE BOUNCER CATCH: If the Java Controller sends back a 409 Conflict,
+                // we trigger an alert box with the exact text message you wrote in the backend!
+                if (xhr.status === 409) {
+                    alert("⚠️ " + xhr.responseText);
+                } else {
+                    alert("Error saving schedule. Please check your inputs.");
+                }
+            }
+        });
+    });
+
+    window.deleteSchedule = function(id) {
+        if(confirm("Remove this schedule block?")) {
+            $.ajax({ 
+                url: "http://localhost:8080/api/schedules/delete/" + id, 
+                type: "DELETE", 
+                success: function() { loadSchedules(); } 
+            });
+        }
+    };
+    // Fetches live data from Sprint 2 to populate the Sprint 3 Dropdowns
+    function populateScheduleDropdowns() {
+        $.ajax({
+            url: "http://localhost:8080/api/faculty/all",
+            type: "GET",
+            success: function(faculties) {
+                let options = '<option value="" disabled selected>Select Faculty</option>';
+                for(let i = 0; i < faculties.length; i++) {
+                    options += `<option value="${faculties[i].id}">${faculties[i].firstName} ${faculties[i].lastName}</option>`;
+                }
+                $("#schedFacultyId").html(options);
+            }
+        });
+
+        $.ajax({
+            url: "http://localhost:8080/api/subject/all",
+            type: "GET",
+            success: function(subjects) {
+                let options = '<option value="" disabled selected>Select Subject</option>';
+                for(let i = 0; i < subjects.length; i++) {
+                    options += `<option value="${subjects[i].id}">${subjects[i].subjectCode} - ${subjects[i].description}</option>`;
+                }
+                $("#schedSubjectId").html(options);
+            }
+        });
+
+        $.ajax({
+            url: "http://localhost:8080/api/section/all",
+            type: "GET",
+            success: function(sections) {
+                let options = '<option value="" disabled selected>Select Section</option>';
+                for(let i = 0; i < sections.length; i++) {
+                    options += `<option value="${sections[i].id}">${sections[i].sectionName}</option>`;
+                }
+                $("#schedSectionId").html(options);
+            }
+        });
+    }
