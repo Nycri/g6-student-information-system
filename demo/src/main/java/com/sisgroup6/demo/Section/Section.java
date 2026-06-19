@@ -15,14 +15,14 @@ public class Section {
     private Long id;
     private String sectionName; 
     private String course;     
-    private int yearLevel;      
-    private int maxCapacity;    
+    private Integer yearLevel;      
+    private Integer maxCapacity;    
 
 
     public Section() {
     }
 
-    public Section(String sectionName, String course, int yearLevel, int maxCapacity) {
+    public Section(String sectionName, String course, Integer yearLevel, Integer maxCapacity) {
         this.sectionName = sectionName;
         this.course = course;
         this.yearLevel = yearLevel;
@@ -51,19 +51,19 @@ public class Section {
       this.course = course;
     }
 
-    public int getYearLevel() {
+    public Integer getYearLevel() {
       return yearLevel;
     }
 
-    public void setYearLevel(int yearLevel) {
+    public void setYearLevel(Integer yearLevel) {
       this.yearLevel = yearLevel;
     }
 
-    public int getMaxCapacity() {
+    public Integer getMaxCapacity() {
       return maxCapacity;
     }
 
-    public void setMaxCapacity(int maxCapacity) {
+    public void setMaxCapacity(Integer maxCapacity) {
       this.maxCapacity = maxCapacity;
     }
   
