@@ -1,0 +1,138 @@
+/* Sidebar Container */
+.sidebar {
+    width: 260px !important;
+    height: calc(100vh - 90px) !important;
+    position: fixed !important;
+    top: 90px !important;
+    left: 0 !important;
+    background-color: var(--primary) !important;
+    color: var(--white) !important;
+    z-index: 1000 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: none !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.sidebar.collapsed {
+    width: 80px !important;
+}
+
+/* Brand/Logo Area (Now stylized as a simple section header) */
+.sidebar-brand {
+    padding: 20px 25px !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    background-color: transparent !important;
+}
+
+.sidebar-brand i {
+    display: none !important; /* Hide icon as in reference mockup */
+}
+
+.sidebar.collapsed .sidebar-brand {
+    padding: 20px 10px !important;
+    text-align: center !important;
+}
+
+.sidebar.collapsed .sidebar-brand-text,
+.sidebar.collapsed .sidebar-link-text {
+    display: none !important;
+}
+
+/* Navigation Links */
+.sidebar-nav {
+    padding: 15px 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+}
+
+.sidebar-link {
+    padding: 12px 20px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+    border-left: none !important;
+    margin: 2px 12px !important;
+    border-radius: 10px !important;
+}
+
+.sidebar-link i {
+    margin-right: 12px !important;
+    font-size: 1.2rem !important;
+}
+
+.sidebar.collapsed .sidebar-link {
+    justify-content: center !important;
+    padding: 12px 0 !important;
+    margin: 2px 8px !important;
+}
+
+.sidebar.collapsed .sidebar-link i {
+    margin-right: 0 !important;
+    font-size: 1.25rem !important;
+}
+
+/* Sidebar Toggle Sibling Selectors for global layout */
+.sidebar.collapsed ~ .top-navbar {
+    padding-left: 330px !important;
+}
+
+/* Position toggle icon and its sibling portal title inside Main Content top padding area */
+.top-navbar > div:first-child {
+    position: fixed !important;
+    top: 105px !important;
+    left: 284px !important;
+    z-index: 1040 !important;
+    display: flex !important;
+    align-items: center !important;
+    transition: left 0.3s ease !important;
+}
+
+#sidebarToggle {
+    color: var(--primary) !important;
+    background-color: transparent !important;
+    font-size: 1.5rem !important;
+    cursor: pointer !important;
+    margin-right: 12px !important;
+}
+
+#sidebarToggle:hover {
+    color: var(--primary-light) !important;
+}
+
+.top-navbar > div:first-child h5 {
+    display: block !important;
+    font-size: 1.35rem !important;
+    font-weight: 700 !important;
+    color: var(--dark) !important;
+    margin: 0 !important;
+}
+
+.sidebar.collapsed ~ .top-navbar > div:first-child {
+    left: 104px !important;
+}
+
+.sidebar.collapsed ~ .main-content {
+    margin-left: 80px !important;
+}
+
+/* Hover and Active States */
+.sidebar-link:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: var(--white) !important;
+}
+
+.sidebar-link.active {
+    background-color: var(--accent) !important;
+    color: var(--primary) !important;
+    font-weight: 700 !important;
+}

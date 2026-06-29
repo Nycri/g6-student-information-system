@@ -67,5 +67,25 @@ public class Section {
       this.maxCapacity = maxCapacity;
     }
   
-    
+    @jakarta.persistence.Transient
+    private java.util.List<Long> studentIds;
+
+    public java.util.List<Long> getStudentIds() {
+        return studentIds;
+    }
+
+    public void setStudentIds(java.util.List<Long> studentIds) {
+        this.studentIds = studentIds;
+    }
+
+    @jakarta.persistence.Transient
+    private Long enrolledCount;
+
+    public Long getEnrolledCount() {
+        return enrolledCount;
+    }
+
+    public void setEnrolledCount(Long enrolledCount) {
+        this.enrolledCount = enrolledCount;
+    }
 }

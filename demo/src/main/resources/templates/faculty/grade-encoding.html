@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Encoding | Faculty Portal</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <link rel="stylesheet"  th:href="@{/assets/css/variables.css}" href="../../static/assets/css/variables.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/global.css}" href="../../static/assets/css/global.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/sidebar.css}" href="../../static/assets/css/sidebar.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/navbar.css}" href="../../static/assets/css/navbar.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/tables.css}" href="../../static/assets/css/tables.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/responsive.css}" href="../../static/assets/css/responsive.css">
+
+    <style>
+        /* Custom Spreadsheet Look */
+        .table-spreadsheet th, .table-spreadsheet td {
+            vertical-align: middle;
+            border: 1px solid var(--border);
+        }
+        .table-spreadsheet th {
+            background-color: #F8FAFC;
+            text-align: center;
+        }
+        /* Make inputs look seamless like Excel cells */
+        .spreadsheet-input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: center;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        .spreadsheet-input:focus {
+            outline: 2px solid var(--primary-light);
+            background: var(--white);
+            border-radius: 4px;
+        }
+        .spreadsheet-input:disabled {
+            background-color: #F3F4F6;
+            color: #6B7280;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-brand d-flex align-items-center justify-content-center">
+            <i class="bi bi-person-workspace me-2 text-white"></i> 
+            <span class="sidebar-brand-text">SIS Faculty</span>
+        </div>
+        <div class="sidebar-nav mt-3">
+            <a href="dashboard.html" class="sidebar-link"><i class="bi bi-speedometer2"></i> <span class="sidebar-link-text">Dashboard</span></a>
+            <a href="profile.html" class="sidebar-link"><i class="bi bi-person-circle"></i> <span class="sidebar-link-text">My Profile</span></a>
+            <a href="schedule.html" class="sidebar-link"><i class="bi bi-calendar-week"></i> <span class="sidebar-link-text">My Schedule</span></a>
+            <a href="class-list.html" class="sidebar-link"><i class="bi bi-card-list"></i> <span class="sidebar-link-text">Class Lists</span></a>
+            <a href="grade-encoding.html" class="sidebar-link active"><i class="bi bi-award"></i> <span class="sidebar-link-text">Grade Encoding</span></a>
+        </div>
+    </div>
+
+    <div class="top-navbar">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-list" id="sidebarToggle"></i>
+            <h5 class="mb-0 ms-3 fw-semibold text-dark d-none d-md-block">Faculty Portal</h5>
+        </div>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-decoration-none text-dark dropdown-toggle" id="facultyProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://ui-avatars.com/api/?name=Alan+Turing&background=1E3A8A&color=fff" class="rounded-circle me-2" width="40" height="40">
+                <span class="d-none d-sm-inline fw-medium">Prof. Alan Turing</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i> Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="../auth/index.html"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="mb-4">
+            <h3 class="fw-bold text-dark mb-1">Academic Grading</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="dashboard.html" class="text-muted text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item active">Grade Encoding</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="table-wrapper">
+            
+            <div class="p-4 border-bottom bg-white d-flex align-items-end flex-wrap gap-3">
+                <div style="min-width: 350px;">
+                    <label class="form-label small fw-semibold text-muted mb-1">Select Class Section</label>
+                    <select id="scheduleSelect" class="form-select shadow-sm border-secondary border-opacity-25">
+                        <option value="" disabled selected>Loading classes...</option>
+                    </select>
+                </div>
+                <button id="loadRosterBtn" class="btn btn-primary px-4 shadow-sm" style="margin-bottom: 2px;">Load Roster</button>
+            </div>
+
+            <div class="p-3 bg-light border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="d-flex align-items-center">
+                    <span id="classHeaderSection" class="badge bg-primary me-2 px-3 py-2">N/A</span>
+                    <span id="classHeaderTitle" class="fw-semibold text-dark">No Class Roster Loaded</span>
+                </div>
+                <div class="text-muted small fw-medium">
+                    <i class="bi bi-calculator me-1"></i> Grading Formula: 30% Prelim | 30% Midterm | 40% Finals
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <form id="gradingForm" action="#" method="POST">
+                    <table class="table table-spreadsheet table-hover mb-0" id="gradingTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">#</th>
+                                <th style="width: 150px; text-align: left;">Student ID</th>
+                                <th style="text-align: left;">Full Name</th>
+                                <th style="width: 120px;" class="text-primary">Prelim (30%)</th>
+                                <th style="width: 120px;" class="text-primary">Midterm (30%)</th>
+                                <th style="width: 120px;" class="text-primary">Finals (40%)</th>
+                                <th style="width: 120px;" class="bg-primary text-white">Final Grade</th>
+                                <th style="width: 120px;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    <i class="bi bi-award fs-2 d-block mb-2 text-secondary opacity-50"></i>
+                                    Please select a class section above and click "Load Roster" to start grading.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            
+            <div class="p-4 bg-white border-top d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <span class="text-danger small fw-medium" id="lockWarning" style="display: none;">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Grades are locked and submitted to the Registrar.
+                </span>
+                <div class="ms-auto d-flex gap-2">
+                    <button type="button" class="btn btn-light border fw-medium text-dark" id="btnSaveDraft">
+                        <i class="bi bi-cloud-arrow-up me-2"></i> Save Draft
+                    </button>
+                    <button type="button" class="btn btn-success fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#submitConfirmationModal" id="btnSubmitFinal">
+                        <i class="bi bi-lock-fill me-2"></i> Submit & Lock Grades
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="submitConfirmationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white border-0">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-exclamation-octagon-fill me-2"></i> Confirm Submission</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="mb-1 fw-medium text-dark">Are you absolutely sure you want to submit these grades?</p>
+                    <p class="text-muted small">Once submitted, this roster will be permanently locked. You will not be able to edit any grades without submitting a formal override request to the University Registrar.</p>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-light border text-muted" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger fw-bold px-4" id="confirmLockBtn" data-bs-dismiss="modal">Yes, Lock Grades</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmSubmitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="modal-icon-container icon-warning">
+                        <i class="bi bi-question-lg"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">Confirm Submission</h4>
+                    <p class="text-muted mb-0">Are you sure you want to save this record? Please double-check your entries before proceeding.</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-center border-0 pt-0 pb-4 bg-white">
+                    <button type="button" class="btn btn-light border px-4 fw-medium text-muted" data-bs-dismiss="modal">Review Again</button>
+                    <button type="button" class="btn btn-primary px-4 fw-semibold shadow-sm" id="btnExecuteSubmit">Yes, Save Record</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="modal-icon-container icon-danger">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">Ready to Leave?</h4>
+                    <p class="text-muted small mb-0">Select "Logout" below if you are ready to end your current session.</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-center border-0 pt-0 pb-4 bg-white">
+                    <button type="button" class="btn btn-light border px-4 fw-medium text-muted" data-bs-dismiss="modal">Cancel</button>
+                    <a th:href="@{/logout}" href="../auth/index.html" class="btn btn-danger px-4 fw-semibold shadow-sm">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script  th:src="@{/assets/js/sidebar.js}" src="../../static/assets/js/sidebar.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) return;
+
+            // 1. Load active classes into select dropdown
+            $.ajax({
+                url: '/api/faculty/' + user.id + '/schedule',
+                type: 'GET',
+                success: function(schedules) {
+                    const select = $('#scheduleSelect');
+                    select.empty();
+                    
+                    if (schedules.length === 0) {
+                        select.append('<option value="">No classes assigned</option>');
+                        return;
+                    }
+                    
+                    select.append('<option value="" disabled selected>Choose a class section...</option>');
+                    schedules.forEach(function(sched) {
+                        select.append(`<option value="${sched.id}" data-subject="${sched.subject.subjectCode} - ${sched.subject.description}" data-section="${sched.section.sectionName}">${sched.subject.subjectCode} (${sched.section.sectionName})</option>`);
+                    });
+                }
+            });
+
+            // 2. Load Roster
+            $('#loadRosterBtn').click(function() {
+                const scheduleId = $('#scheduleSelect').val();
+                if (!scheduleId) {
+                    alert('Please select a class section.');
+                    return;
+                }
+
+                const selectedOpt = $('#scheduleSelect option:selected');
+                const subjectInfo = selectedOpt.attr('data-subject');
+                const sectionName = selectedOpt.attr('data-section');
+
+                $.ajax({
+                    url: `/api/faculty/${user.id}/classes/${scheduleId}/students`,
+                    type: 'GET',
+                    success: function(enrollments) {
+                        $('#classHeaderSection').text(sectionName);
+                        $('#classHeaderTitle').text(subjectInfo);
+
+                        const tbody = $('#gradingTable tbody');
+                        tbody.empty();
+
+                        if (enrollments.length === 0) {
+                            tbody.append('<tr><td colspan="8" class="text-center text-muted">No students enrolled.</td></tr>');
+                            return;
+                        }
+
+                        let allLocked = enrollments.length > 0;
+
+                        enrollments.forEach(function(enrollment, index) {
+                            const student = enrollment.student;
+                            const isLocked = enrollment.submitted;
+                            
+                            if (!isLocked) {
+                                allLocked = false;
+                            }
+
+                            const prelimVal = enrollment.prelimGrade !== null ? enrollment.prelimGrade : '';
+                            const midtermVal = enrollment.midtermGrade !== null ? enrollment.midtermGrade : '';
+                            const finalsVal = enrollment.finalsGrade !== null ? enrollment.finalsGrade : '';
+                            
+                            let finalGradeDisplay = '--';
+                            if (enrollment.finalComputedGrade !== null) {
+                                const pupGrade = mapToPUPScale(enrollment.finalComputedGrade);
+                                finalGradeDisplay = `${pupGrade} (${enrollment.finalComputedGrade.toFixed(2)}%)`;
+                            }
+                            
+                            let statusBadge = '<span class="badge bg-secondary bg-opacity-10 text-secondary">Pending</span>';
+                            let finalGradeClass = '';
+                            if (enrollment.finalComputedGrade !== null) {
+                                if (enrollment.finalComputedGrade >= 75) {
+                                    statusBadge = '<span class="badge bg-success">Passed</span>';
+                                    finalGradeClass = 'text-success';
+                                } else {
+                                    statusBadge = '<span class="badge bg-danger">Failed</span>';
+                                    finalGradeClass = 'text-danger';
+                                }
+                            }
+
+                            tbody.append(`
+                                <tr class="grade-row ${isLocked ? 'locked' : ''}" data-enrollment-id="${enrollment.id}" data-locked="${isLocked}" style="${isLocked ? 'background-color: #F9FAFB;' : ''}">
+                                    <td class="text-center text-muted">${index + 1}</td>
+                                    <td class="fw-bold ${isLocked ? 'text-muted' : 'text-dark'}">STUD-${student.id}</td>
+                                    <td class="${isLocked ? 'text-muted' : ''}">${student.lastName}, ${student.firstName} ${isLocked ? '<i class="bi bi-lock-fill ms-1 small"></i>' : ''}</td>
+                                    <td><input type="number" class="spreadsheet-input grade-calc prelim" value="${prelimVal}" min="0" max="100" step="0.01" ${isLocked ? 'disabled' : ''}></td>
+                                    <td><input type="number" class="spreadsheet-input grade-calc midterm" value="${midtermVal}" min="0" max="100" step="0.01" ${isLocked ? 'disabled' : ''}></td>
+                                    <td><input type="number" class="spreadsheet-input grade-calc finals" value="${finalsVal}" min="0" max="100" step="0.01" ${isLocked ? 'disabled' : ''}></td>
+                                    <td class="text-center bg-light fw-bold final-grade-cell ${finalGradeClass}">${finalGradeDisplay}</td>
+                                    <td class="text-center status-cell">${statusBadge}</td>
+                                </tr>
+                            `);
+                        });
+
+                        // Enable/Disable Actions based on lock status
+                        if (allLocked) {
+                            $('#btnSaveDraft').hide();
+                            $('#btnSubmitFinal').addClass('disabled').removeClass('btn-success').addClass('btn-secondary').html('<i class="bi bi-lock-fill me-2"></i> Locked');
+                            $('#lockWarning').fadeIn();
+                        } else {
+                            $('#btnSaveDraft').show();
+                            $('#btnSubmitFinal').removeClass('disabled').addClass('btn-success').removeClass('btn-secondary').html('<i class="bi bi-lock-fill me-2"></i> Submit & Lock Grades');
+                            $('#lockWarning').hide();
+                        }
+
+                        // Attach live math calculation
+                        $('.grade-calc').on('input', calculateRowGrades);
+                    }
+                });
+            });
+
+            function mapToPUPScale(grade) {
+                if (grade >= 97) return "1.00";
+                if (grade >= 94) return "1.25";
+                if (grade >= 91) return "1.50";
+                if (grade >= 88) return "1.75";
+                if (grade >= 85) return "2.00";
+                if (grade >= 82) return "2.25";
+                if (grade >= 79) return "2.50";
+                if (grade >= 76) return "2.75";
+                if (grade >= 75) return "3.00";
+                return "5.00";
+            }
+
+            // Math loop
+            function calculateRowGrades() {
+                const row = $(this).closest('tr');
+                if (row.attr('data-locked') === 'true') return;
+
+                let prelim = parseFloat(row.find('.prelim').val());
+                let midterm = parseFloat(row.find('.midterm').val());
+                let finals = parseFloat(row.find('.finals').val());
+                let $finalCell = row.find('.final-grade-cell');
+                let $statusCell = row.find('.status-cell');
+
+                if (!isNaN(prelim) && !isNaN(midterm) && !isNaN(finals)) {
+                    let finalGrade = (prelim * 0.30) + (midterm * 0.30) + (finals * 0.40);
+                    let pupGrade = mapToPUPScale(finalGrade);
+                    $finalCell.text(`${pupGrade} (${finalGrade.toFixed(2)}%)`);
+
+                    if (finalGrade >= 75) {
+                        $finalCell.removeClass('text-danger').addClass('text-success');
+                        $statusCell.html('<span class="badge bg-success">Passed</span>');
+                    } else {
+                        $finalCell.removeClass('text-success').addClass('text-danger');
+                        $statusCell.html('<span class="badge bg-danger">Failed</span>');
+                    }
+                } else {
+                    $finalCell.text('--').removeClass('text-success text-danger');
+                    $statusCell.html('<span class="badge bg-secondary bg-opacity-10 text-secondary">Pending</span>');
+                }
+            }
+
+            // Save Draft
+            $('#btnSaveDraft').click(function() {
+                saveAllGrades(false);
+            });
+
+            // Permanent Lock & Submit Confirmation
+            $('#confirmLockBtn').click(function() {
+                saveAllGrades(true);
+            });
+
+            function saveAllGrades(isSubmitting) {
+                const updates = [];
+                let hasEmptyGrades = false;
+
+                $('.grade-row').each(function() {
+                    if ($(this).attr('data-locked') === 'true') return;
+
+                    const id = $(this).attr('data-enrollment-id');
+                    const prelim = $(this).find('.prelim').val();
+                    const midterm = $(this).find('.midterm').val();
+                    const finals = $(this).find('.finals').val();
+
+                    if (isSubmitting && (!prelim || !midterm || !finals)) {
+                        hasEmptyGrades = true;
+                    }
+
+                    updates.push({
+                        enrollmentId: id,
+                        prelimGrade: prelim !== '' ? parseFloat(prelim) : null,
+                        midtermGrade: midterm !== '' ? parseFloat(midterm) : null,
+                        finalsGrade: finals !== '' ? parseFloat(finals) : null,
+                        submit: isSubmitting
+                    });
+                });
+
+                if (updates.length === 0) {
+                    alert('No grades to save or class roster is already locked.');
+                    return;
+                }
+
+                if (isSubmitting && hasEmptyGrades) {
+                    alert('Cannot lock grades. Please ensure all student grades (Prelim, Midterm, Finals) are filled.');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/api/faculty/grades/update',
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(updates),
+                    success: function(response) {
+                        alert(isSubmitting ? 'Grades locked and submitted successfully!' : 'Draft saved successfully!');
+                        $('#loadRosterBtn').click(); // Refresh roster details
+                    },
+                    error: function(xhr) {
+                        alert('Error saving grades: ' + xhr.responseText);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

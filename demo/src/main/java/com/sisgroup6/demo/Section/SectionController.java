@@ -22,6 +22,11 @@ public class SectionController {
         return sectionService.getAllSections();
     }
 
+    @GetMapping("/{id}")
+    public Section getSectionById(@PathVariable Long id) {
+        return sectionService.getSectionById(id);
+    }
+
     @DeleteMapping("/delete/{id}")
     public String deleteSection(@PathVariable Long id) {
         return sectionService.deleteSection(id);

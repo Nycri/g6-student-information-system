@@ -34,4 +34,8 @@ public class CurriculumService {
             return "Error: Could not find ID to delete.";
         }
     }
+
+    public Curriculum getCurriculumById(int id) {
+        return curriculumRepo.findById(id).orElse(null);
+    }
 }

@@ -22,6 +22,11 @@ public class SubjectController {
         return subjectService.getAllSubjects();
     }
 
+    @GetMapping("/{id}")
+    public Subject getSubjectById(@PathVariable Long id) {
+        return subjectService.getSubjectById(id);
+    }
+
     @DeleteMapping("/delete/{id}")
     public String deleteSubject(@PathVariable Long id) {
         return subjectService.deleteSubject(id);

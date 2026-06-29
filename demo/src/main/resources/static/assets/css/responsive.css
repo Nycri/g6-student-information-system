@@ -1,0 +1,20 @@
+/* Mobile Responsive Logic */
+@media (max-width: 992px) {
+    .sidebar {
+        left: -260px;
+        width: 260px;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .sidebar.collapsed {
+        width: 260px;
+    }
+
+    .top-navbar,
+    .main-content {
+        margin-left: 0 !important;
+    }
+}

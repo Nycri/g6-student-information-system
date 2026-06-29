@@ -1,0 +1,108 @@
+/* Background overlay styling */
+body.auth-body {
+    background: linear-gradient(rgba(15, 81, 50, 0.75), rgba(15, 81, 50, 0.75)), url('../../school_bg.jpg') no-repeat center center fixed !important;
+    background-size: cover !important;
+    min-height: 100vh;
+    font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Centered card container */
+.auth-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    max-width: 420px;
+    width: 100%;
+}
+
+.auth-logo {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    border-radius: 30%;
+    margin-bottom: 1rem;
+}
+
+/* Auth input styling */
+.auth-input-group .form-control,
+.auth-input-group .form-select {
+    background-color: #e9ecef;
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+.auth-input-group .form-control:focus,
+.auth-input-group .form-select:focus {
+    background-color: #e9ecef;
+    box-shadow: none;
+    outline: none;
+}
+
+.auth-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 0.4rem;
+}
+
+/* Green buttons styling */
+.btn-green-auth {
+    background-color: #105c36;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    width: 100%;
+    margin-bottom: 0.75rem;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
+.btn-green-auth:hover {
+    background-color: #0b4528;
+    color: #ffffff;
+}
+
+.btn-green-auth:active {
+    transform: scale(0.98);
+}
+
+/* Custom Forgot Password card size adjustment */
+.forgot-card {
+    max-width: 540px !important;
+}
+
+/* Split card layout for login page */
+.auth-split-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    max-width: 780px;
+    width: 100%;
+}
+
+.auth-split-right {
+    background: url('../../campus_preview.png') no-repeat center center;
+    background-size: cover;
+    min-height: 100%;
+}
+
+@media (max-width: 767.98px) {
+    .auth-split-right {
+        display: none;
+    }
+}

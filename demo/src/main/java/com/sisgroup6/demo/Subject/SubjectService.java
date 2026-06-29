@@ -27,4 +27,8 @@ public class SubjectService {
             return "Failed to delete subject.";
         }
     }
+
+    public Subject getSubjectById(Long id) {
+        return subjectRepository.findById(id).orElse(null);
+    }
 }

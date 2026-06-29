@@ -25,4 +25,12 @@ List<Schedule> findConflicts(
             @Param("startTime") String startTime, // <-- Changed to String
             @Param("endTime") String endTime      // <-- Changed to String
     );
+
+    List<Schedule> findByFacultyId(Long facultyId);
+
+    @Query("SELECT s FROM Schedule s WHERE s.section.course = :course")
+    List<Schedule> findBySectionCourse(@Param("course") String course);
+
+    @Query("SELECT s FROM Schedule s WHERE s.section.sectionName = :sectionName")
+    List<Schedule> findBySectionSectionName(@Param("sectionName") String sectionName);
 }

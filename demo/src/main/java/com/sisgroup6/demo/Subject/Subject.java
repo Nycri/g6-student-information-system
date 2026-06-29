@@ -61,5 +61,9 @@ public class Subject {
     public String getCourseAssigned() {
       return courseAssigned;
     }
+
+    public void setCourseAssigned(String courseAssigned) {
+      this.courseAssigned = courseAssigned;
+    }
     
 }

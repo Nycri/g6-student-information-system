@@ -1,0 +1,51 @@
+/* Modal Styling overrides for Bootstrap */
+.modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 25px;
+}
+
+.modal-body {
+    padding: 30px 25px;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--border);
+    padding: 15px 25px;
+    background-color: #F8FAFC;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+/* Big Icons for visual context */
+.modal-icon-container {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+    font-size: 2rem;
+}
+
+.icon-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: var(--danger);
+}
+
+.icon-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--accent);
+}
+
+/* Modal Backdrop Blur */
+.modal-backdrop.show {
+    opacity: 0.6;
+    backdrop-filter: blur(4px); /* Adds a premium blur effect to the background */
+}

@@ -1,0 +1,17 @@
+:root {
+    /* Theme Colors */
+    --primary: #105c36;
+    --primary-light: #146c43;
+    --secondary: #1E3A8A;
+    --accent: #fef3c7;
+    --success: #105c36;
+    --danger: #DC3545;
+    --warning: #FFC107;
+    --background: #f8fafc;
+    --white: #FFFFFF;
+    --dark: #1F2937;
+    --border: #e2e8f0;
+
+    /* Typography */
+    --font-family-base: 'Inter', sans-serif;
+}

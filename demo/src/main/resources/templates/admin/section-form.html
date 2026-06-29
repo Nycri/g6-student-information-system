@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section Form | Admin Portal</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <link rel="stylesheet" th:href="@{/assets/css/variables.css}" href="../../static/assets/css/variables.css">
+    <link rel="stylesheet" th:href="@{/assets/css/global.css}" href="../../static/assets/css/global.css">
+    <link rel="stylesheet" th:href="@{/assets/css/sidebar.css}" href="../../static/assets/css/sidebar.css">
+    <link rel="stylesheet" th:href="@{/assets/css/navbar.css}" href="../../static/assets/css/navbar.css">
+    <link rel="stylesheet" th:href="@{/assets/css/forms.css}" href="../../static/assets/css/forms.css">
+    <link rel="stylesheet" th:href="@{/assets/css/responsive.css}" href="../../static/assets/css/responsive.css">
+</head>
+<body class="bg-light">
+
+    <div class="sidebar">
+        <div class="sidebar-brand d-flex align-items-center justify-content-center">
+            <i class="bi bi-mortarboard-fill me-2 text-accent" style="color: var(--accent);"></i>
+            <span class="sidebar-brand-text">SIS Admin</span>
+        </div>
+        <div class="sidebar-nav mt-3">
+            <a href="dashboard.html" class="sidebar-link"><i class="bi bi-speedometer2"></i> <span class="sidebar-link-text">Dashboard</span></a>
+            <a href="curriculum.html" class="sidebar-link"><i class="bi bi-journal-bookmark-fill"></i> <span class="sidebar-link-text">Curriculum</span></a>
+            <a href="students.html" class="sidebar-link"><i class="bi bi-people-fill"></i> <span class="sidebar-link-text">Students</span></a>
+            <a href="sections.html" class="sidebar-link active"><i class="bi bi-diagram-3-fill"></i> <span class="sidebar-link-text">Sections</span></a>
+            <a href="faculty.html" class="sidebar-link"><i class="bi bi-person-workspace"></i> <span class="sidebar-link-text">Faculty</span></a>
+            <a href="subjects.html" class="sidebar-link"><i class="bi bi-book-half"></i> <span class="sidebar-link-text">Subjects</span></a>
+            <a href="schedule.html" class="sidebar-link"><i class="bi bi-calendar-week-fill"></i> <span class="sidebar-link-text">Schedule</span></a>
+        </div>
+    </div>
+
+    <div class="top-navbar">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-list" id="sidebarToggle"></i>
+            <h5 class="mb-0 ms-3 fw-semibold text-dark d-none d-md-block">Section Management</h5>
+        </div>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-decoration-none text-dark dropdown-toggle" id="adminProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=1E3A8A&color=fff" class="rounded-circle me-2" width="40" height="40">
+                <span class="d-none d-sm-inline fw-medium">Admin User</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                <li><a class="dropdown-item text-danger" href="../auth/index.html"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="mb-4">
+            <h3 class="fw-bold text-dark mb-1">Create Section Block</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="dashboard.html" class="text-decoration-none text-muted">Home</a></li>
+                    <li class="breadcrumb-item"><a href="sections.html" class="text-decoration-none text-muted">Sections</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Create Section</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-xl-9">
+                <div class="form-card">
+                    
+                    <form id="sectionForm" class="needs-validation" novalidate>
+                        <input type="hidden" id="sectionId">
+                        
+                        <h5 class="form-section-title"><i class="bi bi-diagram-3 me-2"></i>Section details</h5>
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label for="sectionName" class="form-label">Section Name <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="sectionName" placeholder="e.g., BSIT-1A" required>
+                                <div class="invalid-feedback">Please provide a section name.</div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="maxCapacity" class="form-label">Maximum Capacity <span class="required-asterisk">*</span></label>
+                                <input type="number" class="form-control" id="maxCapacity" value="40" min="1" required>
+                                <div class="invalid-feedback">Capacity must be at least 1.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="course" class="form-label">Target Course / Program <span class="required-asterisk">*</span></label>
+                                <select class="form-select" id="course" required>
+                                    <option value="" selected disabled>Select Course...</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a target course.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="yearLevel" class="form-label">Year Level <span class="required-asterisk">*</span></label>
+                                <select class="form-select" id="yearLevel" required>
+                                    <option value="" selected disabled>Select Year Level...</option>
+                                    <option value="1">1st Year</option>
+                                    <option value="2">2nd Year</option>
+                                    <option value="3">3rd Year</option>
+                                    <option value="4">4th Year</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a year level.</div>
+                            </div>
+                        </div>
+
+                        <div id="studentsSelectionContainer" class="mt-4 d-none">
+                            <h5 class="form-section-title"><i class="bi bi-people-fill me-2"></i>Associate Students</h5>
+                            <p class="text-muted small">Select the students from this curriculum/program to assign to this section:</p>
+                            <div class="row g-2 border rounded p-3 bg-light" id="studentsCheckboxList" style="max-height: 250px; overflow-y: auto; margin-left: 0; margin-right: 0;">
+                                <!-- Checkboxes will be populated dynamically -->
+                            </div>
+                        </div>
+
+                        <div class="form-actions mt-5">
+                            <a href="sections.html" class="btn btn-light border px-4 fw-medium text-muted">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold shadow-sm">
+                                <i class="bi bi-floppy-fill me-2"></i> Save Record
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            
+            <div class="col-12 col-xl-3 mt-4 mt-xl-0">
+                <div class="card border-0 shadow-sm rounded-4 bg-light p-4 sticky-top" style="top: 100px;">
+                    <h6 class="fw-bold text-dark"><i class="bi bi-info-circle-fill text-primary me-2"></i> Note</h6>
+                    <p class="text-muted small mt-2">
+                        Section records must be tied to an active Curriculum and Course. If the desired curriculum is not showing, ensure it is set to 'Active' in the Curriculum Management tab.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="modal-icon-container icon-danger">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">Ready to Leave?</h4>
+                    <p class="text-muted small mb-0">Select "Logout" below if you are ready to end your current session.</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-center border-0 pt-0 pb-4 bg-white">
+                    <button type="button" class="btn btn-light border px-4 fw-medium text-muted" data-bs-dismiss="modal">Cancel</button>
+                    <a th:href="@{/logout}" href="../auth/index.html" class="btn btn-danger px-4 fw-semibold shadow-sm">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/assets/js/sidebar.js}" src="../../static/assets/js/sidebar.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            let editingCourse = null;
+
+            // Load Curricula for dropdown
+            $.ajax({
+                url: '/api/curriculum/all',
+                type: 'GET',
+                success: function(curricula) {
+                    const select = $('#course');
+                    select.empty();
+                    select.append('<option value="" selected disabled>Select Course...</option>');
+                    curricula.forEach(function(c) {
+                        select.append(`<option value="${c.code}">${c.name}</option>`);
+                    });
+                    
+                    if (editingCourse) {
+                        select.val(editingCourse);
+                    }
+                }
+            });
+
+            function loadStudentsForCourse(courseCode, currentSectionName) {
+                $.ajax({
+                    url: '/api/student/by-course/' + courseCode,
+                    type: 'GET',
+                    success: function(students) {
+                        const container = $('#studentsCheckboxList');
+                        container.empty();
+                        
+                        if (students.length === 0) {
+                            container.append('<div class="col-12 text-muted text-center py-2 small">No students registered in this program yet.</div>');
+                            $('#studentsSelectionContainer').removeClass('d-none');
+                            return;
+                        }
+                        
+                        students.forEach(function(student) {
+                            const isChecked = currentSectionName && (student.section === currentSectionName) ? 'checked' : '';
+                            const badge = student.section ? `<span class="badge bg-secondary ms-2">${student.section}</span>` : '';
+                            container.append(`
+                                <div class="col-md-6 col-lg-4 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input student-checkbox" type="checkbox" value="${student.id}" id="student_${student.id}" ${isChecked}>
+                                        <label class="form-check-label text-dark small" for="student_${student.id}">
+                                            ${student.lastName}, ${student.firstName} ${badge}
+                                        </label>
+                                    </div>
+                                </div>
+                            `);
+                        });
+                        $('#studentsSelectionContainer').removeClass('d-none');
+                    }
+                });
+            }
+
+            $('#course').on('change', function() {
+                const selectedCourse = $(this).val();
+                const sectionName = $('#sectionName').val();
+                if (selectedCourse) {
+                    loadStudentsForCourse(selectedCourse, sectionName);
+                } else {
+                    $('#studentsSelectionContainer').addClass('d-none');
+                }
+            });
+
+            if (id) {
+                // Change title to edit
+                $('.main-content h3').text('Edit Section Block');
+                $('.breadcrumb-item.active').text('Edit Record');
+                $('#sectionId').val(id);
+
+                // Fetch details
+                $.ajax({
+                    url: '/api/section/' + id,
+                    type: 'GET',
+                    success: function(data) {
+                        if (data) {
+                            $('#sectionName').val(data.sectionName);
+                            $('#maxCapacity').val(data.maxCapacity);
+                            editingCourse = data.course;
+                            $('#course').val(data.course);
+                            $('#yearLevel').val(data.yearLevel);
+                            
+                            loadStudentsForCourse(data.course, data.sectionName);
+                        }
+                    }
+                });
+            }
+
+            // Form Submit Interceptor
+            $('#sectionForm').on('submit', function(e) {
+                e.preventDefault();
+
+                if (!this.checkValidity()) {
+                    this.classList.add('was-validated');
+                    return;
+                }
+
+                const studentIds = [];
+                $('.student-checkbox:checked').each(function() {
+                    studentIds.push(parseInt($(this).val()));
+                });
+
+                const payload = {
+                    id: id ? parseInt(id) : null,
+                    sectionName: $('#sectionName').val(),
+                    maxCapacity: parseInt($('#maxCapacity').val()),
+                    course: $('#course').val(),
+                    yearLevel: parseInt($('#yearLevel').val()),
+                    studentIds: studentIds
+                };
+
+                $.ajax({
+                    url: '/api/section/add',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(payload),
+                    success: function(response) {
+                        alert('Section block saved successfully.');
+                        window.location.href = '/admin/sections.html';
+                    },
+                    error: function(xhr) {
+                        alert('Error saving section block: ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+/* Top navbar layout */
+.top-navbar {
+    min-height: 72px;
+    padding: 0 24px;
+    background-color: var(--white);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Push the profile dropdown to the far right of the topbar */
+.top-navbar .dropdown {
+    margin-left: auto !important;
+}
+
+.top-navbar .dropdown-toggle {
+    color: var(--dark) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-weight: 500 !important;
+    padding: 6px 12px !important;
+    border-radius: 30px !important;
+    transition: background-color 0.2s ease !important;
+    text-decoration: none !important;
+}
+
+.top-navbar .dropdown-toggle:hover {
+    background-color: rgba(16, 92, 54, 0.05) !important;
+}
+
+/* Ensure the avatar image is a perfect circle and has a green border */
+.top-navbar .dropdown-toggle img {
+    border-radius: 50% !important;
+    border: 2px solid var(--primary) !important;
+    object-fit: cover !important;
+}

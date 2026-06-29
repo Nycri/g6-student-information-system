@@ -12,8 +12,10 @@ public class Curriculum {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; 
     
+    private String code;
     private String name;
     private String schoolYear;
+    private String status;
     private String description;
     
     public Curriculum() {
@@ -25,6 +27,14 @@ public class Curriculum {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -41,6 +51,14 @@ public class Curriculum {
 
     public void setSchoolYear(String schoolYear) {
         this.schoolYear = schoolYear;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getDescription() {

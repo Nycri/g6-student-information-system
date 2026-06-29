@@ -19,6 +19,8 @@ public class Student {
     private String course;
     private String username;
     private String password;
+    private String section;
+    private String status = "Pending";
 
     public Student() {
     }
@@ -86,5 +88,21 @@ public class Student {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Enrollment | Student Portal</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <link rel="stylesheet"  th:href="@{/assets/css/variables.css}" href="../../static/assets/css/variables.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/global.css}" href="../../static/assets/css/global.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/sidebar.css}" href="../../static/assets/css/sidebar.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/navbar.css}" href="../../static/assets/css/navbar.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/tables.css}" href="../../static/assets/css/tables.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/responsive.css}" href="../../static/assets/css/responsive.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-brand d-flex align-items-center justify-content-center">
+            <i class="bi bi-backpack-fill me-2" style="color: var(--accent);"></i> 
+            <span class="sidebar-brand-text">SIS Student</span>
+        </div>
+        <div class="sidebar-nav mt-3">
+            <a href="dashboard.html" class="sidebar-link"><i class="bi bi-speedometer2"></i> <span class="sidebar-link-text">Dashboard</span></a>
+            <a href="profile.html" class="sidebar-link"><i class="bi bi-person-circle"></i> <span class="sidebar-link-text">My Profile</span></a>
+            <a href="enrollment.html" class="sidebar-link active"><i class="bi bi-card-checklist"></i> <span class="sidebar-link-text">Course Enrollment</span></a>
+            <a href="grades.html" class="sidebar-link"><i class="bi bi-award"></i> <span class="sidebar-link-text">My Grades</span></a>
+            <a href="schedule.html" class="sidebar-link"><i class="bi bi-calendar-week"></i> <span class="sidebar-link-text">My Schedule</span></a>
+        </div>
+    </div>
+
+    <div class="top-navbar">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-list" id="sidebarToggle"></i>
+            <h5 class="mb-0 ms-3 fw-semibold text-dark d-none d-md-block">Student Portal</h5>
+        </div>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-decoration-none text-dark dropdown-toggle" id="studentProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://ui-avatars.com/api/?name=Anna+Smith&background=F59E0B&color=fff" class="rounded-circle me-2" width="40" height="40">
+                <span class="d-none d-sm-inline fw-medium">Anna Smith</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i> Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="../auth/index.html"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="mb-4">
+            <h3 class="fw-bold text-dark mb-1">Subject Enrollment</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="dashboard.html" class="text-muted text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item active">Enrollment</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="alert alert-info border-info border-opacity-25 bg-info bg-opacity-10 d-flex align-items-center mb-4 shadow-sm" role="alert" id="enrollmentStatusAlert">
+            <i class="bi bi-info-circle-fill text-info fs-4 me-3"></i>
+            <div>
+                <strong>Enrollment is currently OPEN.</strong> Please select your subjects for the 1st Semester, AY 2026-2027. Maximum allowed load is 24 units.
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-12 col-xl-8">
+                <div class="table-wrapper h-100">
+                    <div class="p-3 bg-white border-bottom d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold text-dark mb-0" id="availableSubjectsHeader">Available Subjects</h6>
+                        <div class="input-group input-group-sm" style="max-width: 250px;">
+                            <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control border-start-0 bg-light" placeholder="Search subject...">
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Descriptive Title</th>
+                                    <th>Units</th>
+                                    <th>Pre-requisite</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="5" class="text-center text-muted">Loading available subjects...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-xl-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-white sticky-top" style="top: 100px;">
+                    <div class="card-header bg-white border-bottom p-4">
+                        <h5 class="fw-bold text-dark mb-0"><i class="bi bi-cart-check-fill text-accent me-2"></i> Enrollment Cart</h5>
+                    </div>
+                    
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush" id="cartList">
+                            <li class="list-group-item p-4 text-center text-muted" id="emptyCartMessage">
+                                <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
+                                <span class="small">Your cart is empty. Select subjects from the list.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-footer bg-light border-top p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted fw-medium">Total Units:</span>
+                            <h4 class="fw-bold text-dark mb-0"><span id="totalUnits">0</span> <span class="fs-6 text-muted fw-normal">/ 24</span></h4>
+                        </div>
+                        <button class="btn btn-primary w-100 py-2 fw-semibold shadow-sm" id="btnSubmitEnrollment" disabled>
+                            <i class="bi bi-send-check-fill me-2"></i> Submit Registration
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmSubmitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="modal-icon-container icon-warning">
+                        <i class="bi bi-question-lg"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">Confirm Submission</h4>
+                    <p class="text-muted mb-0">Are you sure you want to save this record? Please double-check your entries before proceeding.</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-center border-0 pt-0 pb-4 bg-white">
+                    <button type="button" class="btn btn-light border px-4 fw-medium text-muted" data-bs-dismiss="modal">Review Again</button>
+                    <button type="button" class="btn btn-primary px-4 fw-semibold shadow-sm" id="btnExecuteSubmit">Yes, Save Record</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="modal-icon-container icon-danger">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">Ready to Leave?</h4>
+                    <p class="text-muted small mb-0">Select "Logout" below if you are ready to end your current session.</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-center border-0 pt-0 pb-4 bg-white">
+                    <button type="button" class="btn btn-light border px-4 fw-medium text-muted" data-bs-dismiss="modal">Cancel</button>
+                    <a th:href="@{/logout}" href="../auth/index.html" class="btn btn-danger px-4 fw-semibold shadow-sm">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script  th:src="@{/assets/js/sidebar.js}" src="../../static/assets/js/sidebar.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) return;
+
+            let totalUnits = 0;
+            const cart = [];
+            let enrollmentOpen = true;
+            let alreadyEnrolled = false;
+
+            function checkEnrollmentStatus() {
+                // Fetch student details first
+                $.ajax({
+                    url: '/api/student/' + user.id,
+                    type: 'GET',
+                    success: function(student) {
+                        if (!student) return;
+                        
+                        if (student.course) {
+                            $('#availableSubjectsHeader').text('Available Subjects (' + student.course + ')');
+                        }
+                        
+                        if (!student.section) {
+                            $('#enrollmentStatusAlert').removeClass('alert-info alert-success').addClass('alert-warning border-warning border-opacity-25 bg-warning bg-opacity-10')
+                                .html(`
+                                    <i class="bi bi-exclamation-triangle-fill text-warning fs-4 me-3"></i>
+                                    <div>
+                                        <strong>Pending Section Assignment:</strong> You have not been assigned to a Section yet. Please contact the Admin portal to be added to a section before enrolling.
+                                    </div>
+                                `);
+                            $('.btn-add-subject').addClass('disabled').prop('disabled', true);
+                            $('#btnSubmitEnrollment').prop('disabled', true).addClass('disabled');
+                            $('.table-custom tbody').empty().append('<tr><td colspan="5" class="text-center text-muted">No available subjects. Please wait for section assignment.</td></tr>');
+                            return;
+                        }
+                        
+                        // Check if already enrolled first
+                        $.ajax({
+                            url: '/api/student/' + user.id + '/dashboard',
+                            type: 'GET',
+                            success: function(stats) {
+                                if (stats.status === 'Enrolled') {
+                                    alreadyEnrolled = true;
+                                    $('#enrollmentStatusAlert').removeClass('alert-info alert-warning').addClass('alert-success border-success border-opacity-25 bg-success bg-opacity-10')
+                                        .html(`
+                                            <i class="bi bi-check-circle-fill text-success fs-4 me-3"></i>
+                                            <div>
+                                                <strong>You are officially ENROLLED!</strong> Your subject load has been locked. You can view your schedule in the Schedule tab.
+                                            </div>
+                                        `);
+                                    $('.btn-add-subject').addClass('disabled').prop('disabled', true);
+                                    $('#btnSubmitEnrollment').prop('disabled', true).addClass('disabled');
+                                    loadAvailableSubjects();
+                                } else {
+                                    // Check if enrollment is open
+                                    $.ajax({
+                                        url: '/api/enrollment/is-open',
+                                        type: 'GET',
+                                        success: function(isOpen) {
+                                            enrollmentOpen = isOpen.open;
+                                            if (!enrollmentOpen) {
+                                                $('#enrollmentStatusAlert').removeClass('alert-info alert-success').addClass('alert-warning border-warning border-opacity-25 bg-warning bg-opacity-10')
+                                                    .html(`
+                                                        <i class="bi bi-exclamation-triangle-fill text-warning fs-4 me-3"></i>
+                                                        <div>
+                                                            <strong>Enrollment is currently CLOSED.</strong> Please coordinate with the Registrar's Office for late enrollment schedules.
+                                                        </div>
+                                                    `);
+                                                $('.btn-add-subject').addClass('disabled').prop('disabled', true);
+                                                $('#btnSubmitEnrollment').prop('disabled', true).addClass('disabled');
+                                            } else {
+                                                $('#enrollmentStatusAlert').removeClass('alert-warning alert-success').addClass('alert-info border-info border-opacity-25 bg-info bg-opacity-10')
+                                                    .html(`
+                                                        <i class="bi bi-info-circle-fill text-info fs-4 me-3"></i>
+                                                        <div>
+                                                            <strong>Enrollment is currently OPEN.</strong> Please select your subjects for the 1st Semester, AY 2026-2027. Maximum allowed load is 24 units.
+                                                        </div>
+                                                    `);
+                                            }
+                                            loadAvailableSubjects();
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+            // 1. Fetch available subjects based on student curriculum/course
+            function loadAvailableSubjects() {
+                $.ajax({
+                    url: '/api/enrollment/available-subjects/' + user.id,
+                    type: 'GET',
+                    success: function(schedules) {
+                        const tbody = $('.table-custom tbody');
+                        tbody.empty();
+
+                        if (schedules.length === 0) {
+                            tbody.append('<tr><td colspan="5" class="text-center text-muted">No available subjects for enrollment.</td></tr>');
+                            return;
+                        }
+
+                        schedules.forEach(function(sched) {
+                            const instructorName = sched.faculty ? sched.faculty.firstName + ' ' + sched.faculty.lastName : 'TBA';
+                            const disabledAttr = (!enrollmentOpen || alreadyEnrolled) ? 'disabled' : '';
+                            
+                            tbody.append(`
+                                <tr>
+                                    <td class="fw-bold text-primary">${sched.subject.subjectCode}</td>
+                                    <td>
+                                        <div class="fw-semibold text-dark">${sched.subject.description}</div>
+                                        <div class="text-muted small"><i class="bi bi-clock me-1"></i> ${sched.dayOfWeek} ${sched.startTime}-${sched.endTime} | Room: ${sched.room}</div>
+                                    </td>
+                                    <td>${sched.subject.units}</td>
+                                    <td><span class="text-muted small">${instructorName}</span></td>
+                                    <td class="text-end">
+                                        <button class="btn btn-sm btn-outline-primary btn-add-subject" 
+                                            data-schedule-id="${sched.id}" 
+                                            data-code="${sched.subject.subjectCode}" 
+                                            data-title="${sched.subject.description}" 
+                                            data-units="${sched.subject.units}"
+                                            ${disabledAttr}>
+                                            <i class="bi bi-plus-lg"></i> Add
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    }
+                });
+            }
+
+            checkEnrollmentStatus();
+
+            // Add Subject to Cart
+            $(document).on('click', '.btn-add-subject', function() {
+                const scheduleId = $(this).data('schedule-id');
+                const code = $(this).data('code');
+                const title = $(this).data('title');
+                const units = parseInt($(this).data('units'));
+
+                // Avoid duplicates
+                if (cart.some(item => item.scheduleId === scheduleId)) return;
+
+                // Add to array
+                cart.push({ scheduleId: scheduleId, code: code, units: units });
+
+                // Change button state
+                $(this).removeClass('btn-outline-primary').addClass('btn-success text-white disabled').html('<i class="bi bi-check-lg"></i> Added');
+
+                // Remove Empty message if exists
+                $('#emptyCartMessage').hide();
+
+                // Add to Cart UI
+                const cartItem = `
+                    <li class="list-group-item p-3 d-flex justify-content-between align-items-start cart-item" data-schedule-id="${scheduleId}" data-units="${units}">
+                        <div>
+                            <div class="fw-bold text-primary">${code}</div>
+                            <div class="small text-muted">${title}</div>
+                        </div>
+                        <div class="d-flex flex-column align-items-end">
+                            <span class="badge bg-light text-dark border mb-1">${units} Units</span>
+                            <button class="btn btn-link text-danger p-0 btn-remove text-decoration-none small" data-schedule-id="${scheduleId}"><i class="bi bi-x-circle"></i> Remove</button>
+                        </div>
+                    </li>
+                `;
+                $('#cartList').append(cartItem);
+
+                // Update Units
+                totalUnits += units;
+                updateCartUI();
+            });
+
+            // Remove Subject from Cart
+            $(document).on('click', '.btn-remove', function() {
+                const scheduleId = $(this).data('schedule-id');
+                const listItem = $(this).closest('.cart-item');
+                const units = parseInt(listItem.data('units'));
+
+                // Remove from array
+                const index = cart.findIndex(item => item.scheduleId === scheduleId);
+                if (index > -1) {
+                    cart.splice(index, 1);
+                }
+
+                // Reset Add Button in table
+                $(`.btn-add-subject[data-schedule-id="${scheduleId}"]`).removeClass('btn-success text-white disabled').addClass('btn-outline-primary').html('<i class="bi bi-plus-lg"></i> Add');
+
+                // Remove from Cart UI
+                listItem.remove();
+
+                // Update Units
+                totalUnits -= units;
+                updateCartUI();
+
+                // Show empty message if cart is empty
+                if (totalUnits === 0) {
+                    $('#emptyCartMessage').show();
+                }
+            });
+
+            function updateCartUI() {
+                $('#totalUnits').text(totalUnits);
+                
+                if (totalUnits > 0 && totalUnits <= 24) {
+                    $('#btnSubmitEnrollment').prop('disabled', false);
+                    $('#totalUnits').removeClass('text-danger');
+                } else if (totalUnits > 24) {
+                    $('#btnSubmitEnrollment').prop('disabled', true);
+                    $('#totalUnits').addClass('text-danger');
+                } else {
+                    $('#btnSubmitEnrollment').prop('disabled', true);
+                }
+            }
+
+            // Submit Cart to backend
+            $('#btnSubmitEnrollment').click(function() {
+                const scheduleIds = cart.map(item => item.scheduleId);
+                
+                $.ajax({
+                    url: '/api/enrollment/enroll-batch',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        studentId: user.id,
+                        scheduleIds: scheduleIds
+                    }),
+                    success: function() {
+                        alert('Enrollment Submitted successfully!');
+                        window.location.href = '/student/dashboard';
+                    },
+                    error: function(xhr) {
+                        alert('Error submitting enrollment: ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

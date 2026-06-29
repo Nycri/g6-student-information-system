@@ -20,6 +20,11 @@ public class CurriculumController {
         return curriculumService.getAllCurriculum();
     }
 
+    @GetMapping("/{id}")
+    public Curriculum getCurriculumById(@PathVariable int id) {
+        return curriculumService.getCurriculumById(id);
+    }
+
     // API to add a new curriculum
     @PostMapping("/add")
     public String addCurriculum(@RequestBody Curriculum curriculum) {

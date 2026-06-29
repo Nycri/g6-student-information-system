@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Schedule | Admin Portal</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <link rel="stylesheet"  th:href="@{/assets/css/variables.css}" href="../../static/assets/css/variables.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/global.css}" href="../../static/assets/css/global.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/sidebar.css}" href="../../static/assets/css/sidebar.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/navbar.css}" href="../../static/assets/css/navbar.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/forms.css}" href="../../static/assets/css/forms.css">
+    <link rel="stylesheet"  th:href="@{/assets/css/responsive.css}" href="../../static/assets/css/responsive.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-brand d-flex align-items-center justify-content-center">
+            <i class="bi bi-mortarboard-fill me-2 text-accent" style="color: var(--accent);"></i> SIS Admin
+        </div>
+        <div class="sidebar-nav mt-3">
+            <a href="dashboard.html" class="sidebar-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+            <a href="curriculum.html" class="sidebar-link"><i class="bi bi-journal-bookmark-fill"></i> Curriculum</a>
+            <a href="students.html" class="sidebar-link"><i class="bi bi-people-fill"></i> Students</a>
+            <a href="sections.html" class="sidebar-link"><i class="bi bi-diagram-3-fill"></i> Sections</a>
+            <a href="faculty.html" class="sidebar-link"><i class="bi bi-person-workspace"></i> Faculty</a>
+            <a href="subjects.html" class="sidebar-link"><i class="bi bi-book-half"></i> Subjects</a>
+            <a href="schedule.html" class="sidebar-link active"><i class="bi bi-calendar-week-fill"></i> Schedule</a>
+        </div>
+    </div>
+
+    <div class="top-navbar">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-list" id="sidebarToggle"></i>
+            <h5 class="mb-0 ms-3 fw-semibold text-dark d-none d-md-block">Schedule Management</h5>
+        </div>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="mb-4">
+            <h3 class="fw-bold text-dark mb-1">Create Class Schedule</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="dashboard.html" class="text-muted text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item"><a href="schedule.html" class="text-muted text-decoration-none">Schedule</a></li>
+                    <li class="breadcrumb-item active">New Time Block</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-xl-9">
+                <div class="form-card">
+                    
+                    <div class="alert alert-danger d-none align-items-center" id="conflictAlert" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                        <div>
+                            <strong>Scheduling Conflict Detected:</strong> <span id="conflictMessage">The selected room is already occupied during this time block.</span>
+                        </div>
+                    </div>
+
+                    <form id="scheduleForm" class="needs-validation" novalidate>
+                        <input type="hidden" id="scheduleId">
+                        
+                        <h5 class="form-section-title"><i class="bi bi-link-45deg me-2"></i>Entity Assignment</h5>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label for="subjectId" class="form-label">Subject <span class="required-asterisk">*</span></label>
+                                <select class="form-select" id="subjectId" required>
+                                    <option value="" selected disabled>Loading subjects...</option>
+                                </select>
+                                <div class="invalid-feedback">Subject is required.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sectionId" class="form-label">Target Section <span class="required-asterisk">*</span></label>
+                                <select class="form-select" id="sectionId" required>
+                                    <option value="" selected disabled>Loading sections...</option>
+                                </select>
+                                <div class="invalid-feedback">Section is required.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="facultyId" class="form-label">Instructor <span class="required-asterisk">*</span></label>
+                                <select class="form-select" id="facultyId" required>
+                                    <option value="" selected disabled>Loading instructors...</option>
+                                </select>
+                                <div class="invalid-feedback">Instructor is required.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="room" class="form-label">Room Assignment <span class="required-asterisk">*</span></label>
+                                <select class="form-select" id="room" required>
+                                    <option value="" selected disabled>Select Room...</option>
+                                    <option value="Lec 101">Lec Room 101</option>
+                                    <option value="Lec 102">Lec Room 102</option>
+                                    <option value="Lab 304">Computer Lab 304</option>
+                                </select>
+                                <div class="invalid-feedback">Room is required.</div>
+                            </div>
+                        </div>
+
+                        <h5 class="form-section-title"><i class="bi bi-clock-history me-2"></i>Time Block Rules</h5>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-4">
+                                <label for="dayOfWeek" class="form-label">Day of Week <span class="required-asterisk">*</span></label>
+                                <select class="form-select" id="dayOfWeek" required>
+                                    <option value="" selected disabled>Select Day...</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                </select>
+                                <div class="invalid-feedback">Day is required.</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="startTime" class="form-label">Start Time <span class="required-asterisk">*</span></label>
+                                <input type="time" class="form-control" id="startTime" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="endTime" class="form-label">End Time <span class="required-asterisk">*</span></label>
+                                <input type="time" class="form-control" id="endTime" required>
+                                <div class="invalid-feedback" id="timeError">End time must be after start time.</div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions mt-4">
+                            <a href="schedule.html" class="btn btn-light border px-4 fw-medium text-muted">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold shadow-sm">
+                                <i class="bi bi-shield-check me-2"></i> Save Schedule
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="col-12 col-xl-3 mt-4 mt-xl-0">
+                <div class="card border-0 shadow-sm rounded-4 bg-light p-4 sticky-top" style="top: 100px;">
+                    <h6 class="fw-bold text-dark"><i class="bi bi-info-circle-fill text-primary me-2"></i> Note</h6>
+                    <p class="text-muted small mt-2">
+                        Schedule records must be tied to an active Curriculum. If the desired curriculum is not showing, ensure it is set to 'Active' in the Curriculum Management tab.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmSubmitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="modal-icon-container icon-warning">
+                        <i class="bi bi-question-lg"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">Confirm Submission</h4>
+                    <p class="text-muted mb-0">Are you sure you want to save this record? Please double-check your entries before proceeding.</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-center border-0 pt-0 pb-4 bg-white">
+                    <button type="button" class="btn btn-light border px-4 fw-medium text-muted" data-bs-dismiss="modal">Review Again</button>
+                    <button type="button" class="btn btn-primary px-4 fw-semibold shadow-sm" id="btnExecuteSubmit">Yes, Save Record</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="modal-icon-container icon-danger">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">Ready to Leave?</h4>
+                    <p class="text-muted small mb-0">Select "Logout" below if you are ready to end your current session.</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-center border-0 pt-0 pb-4 bg-white">
+                    <button type="button" class="btn btn-light border px-4 fw-medium text-muted" data-bs-dismiss="modal">Cancel</button>
+                    <a th:href="@{/logout}" href="../auth/index.html" class="btn btn-danger px-4 fw-semibold shadow-sm">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script  th:src="@{/assets/js/sidebar.js}" src="../../static/assets/js/sidebar.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            let editingSubjectId = null;
+            let editingSectionId = null;
+            let editingFacultyId = null;
+
+            // Load Subjects
+            $.ajax({
+                url: '/api/subject/all',
+                type: 'GET',
+                success: function(subjects) {
+                    const select = $('#subjectId');
+                    select.empty();
+                    select.append('<option value="" selected disabled>Select Subject...</option>');
+                    subjects.forEach(function(sub) {
+                        select.append(`<option value="${sub.id}">${sub.subjectCode} - ${sub.description}</option>`);
+                    });
+                    if (editingSubjectId) select.val(editingSubjectId);
+                }
+            });
+
+            // Load Sections
+            $.ajax({
+                url: '/api/section/all',
+                type: 'GET',
+                success: function(sections) {
+                    const select = $('#sectionId');
+                    select.empty();
+                    select.append('<option value="" selected disabled>Select Section Block...</option>');
+                    sections.forEach(function(sec) {
+                        select.append(`<option value="${sec.id}">${sec.sectionName}</option>`);
+                    });
+                    if (editingSectionId) select.val(editingSectionId);
+                }
+            });
+
+            // Load Faculty
+            $.ajax({
+                url: '/api/faculty/all',
+                type: 'GET',
+                success: function(faculty) {
+                    const select = $('#facultyId');
+                    select.empty();
+                    select.append('<option value="" selected disabled>Assign Faculty...</option>');
+                    faculty.forEach(function(fac) {
+                        select.append(`<option value="${fac.id}">Prof. ${fac.firstName} ${fac.lastName}</option>`);
+                    });
+                    if (editingFacultyId) select.val(editingFacultyId);
+                }
+            });
+
+            if (id) {
+                $('.main-content h3').text('Edit Schedule Block');
+                $('.breadcrumb-item.active').text('Edit Record');
+                $('#scheduleId').val(id);
+
+                // Fetch details
+                $.ajax({
+                    url: '/api/schedules/' + id,
+                    type: 'GET',
+                    success: function(data) {
+                        if (data) {
+                            editingSubjectId = data.subject ? data.subject.id : null;
+                            editingSectionId = data.section ? data.section.id : null;
+                            editingFacultyId = data.faculty ? data.faculty.id : null;
+                            
+                            $('#subjectId').val(editingSubjectId);
+                            $('#sectionId').val(editingSectionId);
+                            $('#facultyId').val(editingFacultyId);
+                            
+                            $('#room').val(data.room);
+                            $('#dayOfWeek').val(data.dayOfWeek);
+                            
+                            // Format start/end time to HH:mm
+                            if (data.startTime && data.startTime.length > 5) {
+                                $('#startTime').val(data.startTime.substring(0, 5));
+                            } else {
+                                $('#startTime').val(data.startTime);
+                            }
+                            if (data.endTime && data.endTime.length > 5) {
+                                $('#endTime').val(data.endTime.substring(0, 5));
+                            } else {
+                                $('#endTime').val(data.endTime);
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Form Submit Interceptor
+            $('#scheduleForm').on('submit', function(e) {
+                e.preventDefault();
+
+                let start = $('#startTime').val();
+                let end = $('#endTime').val();
+
+                if (start && end) {
+                    let startTimeNum = parseInt(start.replace(':', ''));
+                    let endTimeNum = parseInt(end.replace(':', ''));
+
+                    if (endTimeNum <= startTimeNum) {
+                        $('#endTime').addClass('is-invalid');
+                        return false;
+                    } else {
+                        $('#endTime').removeClass('is-invalid');
+                    }
+                }
+
+                if (!this.checkValidity()) {
+                    this.classList.add('was-validated');
+                    return;
+                }
+
+                const payload = {
+                    id: id ? parseInt(id) : null,
+                    subject: { id: parseInt($('#subjectId').val()) },
+                    section: { id: parseInt($('#sectionId').val()) },
+                    faculty: { id: parseInt($('#facultyId').val()) },
+                    room: $('#room').val(),
+                    dayOfWeek: $('#dayOfWeek').val(),
+                    startTime: start,
+                    endTime: end
+                };
+
+                $.ajax({
+                    url: '/api/schedules/add',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(payload),
+                    success: function(response) {
+                        alert('Schedule saved successfully.');
+                        window.location.href = '/admin/schedule.html';
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 409) {
+                            $('#conflictMessage').text(xhr.responseText);
+                            $('#conflictAlert').removeClass('d-none').addClass('d-flex');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                            alert('Error saving schedule record: ' + xhr.responseText);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

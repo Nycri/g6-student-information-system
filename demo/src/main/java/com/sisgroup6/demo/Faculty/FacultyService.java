@@ -12,6 +12,17 @@ public class FacultyService {
     private FacultyRepository facultyRepository;
 
     public Faculty addFaculty(Faculty faculty) {
+        if (faculty.getId() != null) {
+            Faculty existing = facultyRepository.findById(faculty.getId()).orElse(null);
+            if (existing != null) {
+                existing.setFirstName(faculty.getFirstName());
+                existing.setLastName(faculty.getLastName());
+                existing.setEmail(faculty.getEmail());
+                existing.setDepartment(faculty.getDepartment());
+                return facultyRepository.save(existing);
+            }
+        }
+
         System.out.println("Processing new faculty member: " + faculty.getLastName());
 
         String generatedUsername = faculty.getFirstName().toLowerCase().charAt(0) + faculty.getLastName().toLowerCase();
@@ -27,6 +38,10 @@ public class FacultyService {
         return facultyRepository.save(faculty);
     }
 
+    public Faculty getFacultyById(Long id) {
+        return facultyRepository.findById(id).orElse(null);
+    }
+
     public List<Faculty> getAllFaculties() {
         return facultyRepository.findAll();
     }
@@ -38,5 +53,17 @@ public class FacultyService {
         } catch (Exception e) {
             return "Failed to delete faculty member.";
         }
+    }
+
+    public Faculty updateProfile(Long id, String email, String newPassword) {
+        Faculty faculty = facultyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Faculty member not found."));
+        if (email != null && !email.trim().isEmpty()) {
+            faculty.setEmail(email);
+        }
+        if (newPassword != null && !newPassword.trim().isEmpty()) {
+            faculty.setPassword(newPassword);
+        }
+        return facultyRepository.save(faculty);
     }
 }

@@ -41,6 +41,15 @@ public class ScheduleController {
         return new ResponseEntity<>(schedules, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getScheduleById(@PathVariable Long id) {
+        Schedule schedule = scheduleService.getScheduleById(id);
+        if (schedule != null) {
+            return new ResponseEntity<>(schedule, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Schedule not found.", HttpStatus.NOT_FOUND);
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteSchedule(@PathVariable Long id) {
         scheduleService.deleteSchedule(id);
